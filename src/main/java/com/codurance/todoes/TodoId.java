@@ -14,6 +14,10 @@ public class TodoId {
         return new TodoId(UUID.randomUUID());
     }
 
+    public static TodoId fromString(String id) {
+        return new TodoId(UUID.fromString(id));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -25,5 +29,10 @@ public class TodoId {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 }

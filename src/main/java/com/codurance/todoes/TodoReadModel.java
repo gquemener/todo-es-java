@@ -1,12 +1,18 @@
 package com.codurance.todoes;
 
 public class TodoReadModel {
+    private final String id;
     private final String description;
-    private final boolean closed;
+    private boolean closed;
 
-    public TodoReadModel(String description, boolean closed) {
+    public TodoReadModel(String id, String description, boolean closed) {
+        this.id = id;
         this.description = description;
         this.closed = closed;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getDescription() {
@@ -15,5 +21,9 @@ public class TodoReadModel {
 
     public boolean isClosed() {
         return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 }

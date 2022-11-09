@@ -2,14 +2,11 @@ package com.codurance.todoes;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
-    private Map<TodoId, List<TodoEvent>> store = new HashMap<>();
+    private final Map<TodoId, List<TodoEvent>> store = new HashMap<>();
 
     @Override
     public void save(TodoAggregate todo) {
@@ -21,17 +18,36 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
     }
 
     @Override
+    public Optional<TodoAggregate> find(TodoId id) {
+        if (!store.containsKey(id)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(TodoAggregate.replay(
+            store.get(id)
+        ));
+    }
+
+    @Override
     public List<TodoReadModel> all() {
-        List<TodoReadModel> todoList = new ArrayList<>();
+        Map<TodoId, TodoReadModel> todos = new HashMap<>();
         
         for (Map.Entry<TodoId, List<TodoEvent>> entry : store.entrySet()) {
             for (TodoEvent event : entry.getValue()) {
                 if (event instanceof TodoWasCreated todoWasCreated) {
-                    todoList.add(new TodoReadModel(todoWasCreated.description(), false));
+                    todos.put(todoWasCreated.id(), new TodoReadModel(
+                        todoWasCreated.id().toString(),
+                        todoWasCreated.description(),
+                        false
+                    ));
+                }
+
+                if (event instanceof TodoWasClosed todoWasClosed) {
+                    todos.get(todoWasClosed.id()).setClosed(true);
                 }
             }
         }
         
-        return todoList; 
+        return todos.values().stream().toList();
     }
 }

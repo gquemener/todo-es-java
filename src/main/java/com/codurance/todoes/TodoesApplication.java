@@ -4,10 +4,7 @@ import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -39,6 +36,17 @@ public class TodoesApplication {
 			@ModelAttribute CreateTodo createTodo
 	) {
 		TodoAggregate todo = new TodoAggregate(TodoId.generate(), createTodo.description);
+		repository.save(todo);
+
+		return new RedirectView("/", true);
+	}
+
+	@GetMapping("/close/{id}")
+	public RedirectView closeTodo(
+		@PathVariable String id
+	) {
+		TodoAggregate todo = repository.find(TodoId.fromString(id)).orElseThrow();
+		todo.close();
 		repository.save(todo);
 
 		return new RedirectView("/", true);

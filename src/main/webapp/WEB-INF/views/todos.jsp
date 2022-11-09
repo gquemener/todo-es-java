@@ -11,7 +11,7 @@
     <ul>
         <c:forEach items="${todos}" var="todo">
             <li>
-                <c:if test="${!todo.closed}"><a href="#">Close</a> - </c:if>
+                <c:if test="${!todo.closed}"><a href="/close/${todo.id}">Close</a> - </c:if>
                 <c:if test="${todo.closed}"><strike></c:if>
                 ${todo.description}
                 <c:if test="${todo.closed}"></strike></c:if>

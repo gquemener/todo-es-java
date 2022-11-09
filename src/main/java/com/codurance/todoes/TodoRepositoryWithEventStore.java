@@ -37,8 +37,7 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
                 if (event instanceof TodoWasCreated todoWasCreated) {
                     todos.put(todoWasCreated.id(), new TodoReadModel(
                         todoWasCreated.id().toString(),
-                        todoWasCreated.description(),
-                        false
+                        todoWasCreated.description()
                     ));
                 }
 

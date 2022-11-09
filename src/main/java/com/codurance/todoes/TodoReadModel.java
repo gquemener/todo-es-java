@@ -5,10 +5,10 @@ public class TodoReadModel {
     private final String description;
     private boolean closed;
 
-    public TodoReadModel(String id, String description, boolean closed) {
+    public TodoReadModel(String id, String description) {
         this.id = id;
         this.description = description;
-        this.closed = closed;
+        this.closed = false;
     }
 
     public String getId() {

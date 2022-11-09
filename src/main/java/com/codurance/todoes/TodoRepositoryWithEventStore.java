@@ -14,9 +14,7 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
     @Override
     public void save(TodoAggregate todo) {
         TodoId id = todo.id();
-        if (!store.containsKey(id)) {
-            store.put(id, new ArrayList<>());
-        }
+        store.computeIfAbsent(id, k -> new ArrayList<>());
         for (TodoEvent event : todo.popEvents()) {
             store.get(id).add(event);
         }

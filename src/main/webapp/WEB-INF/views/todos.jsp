@@ -23,7 +23,7 @@
     <h2>Create Todo</h2>
     <form action="/todos" method="post">
         <label for="description">Description: </label>
-        <input id="description" name="description" type="text" required />
+        <input id="description" name="description" type="text" required tabindex="1" />
         <input type="submit" value="Create" />
     </form>
 </body>

@@ -10,6 +10,21 @@ services:
     user: '${UID:-1000}:${GID:-1000}'
     ports:
       - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      WAIT_HOSTS: postgres:5432
+      WAIT_LOGGER_LEVEL: info
+
+  postgres:
+    image: postgres:13
+    volumes:
+      - './docker/pgsql:/docker-entrypoint-initdb.d'
+    environment:
+      POSTGRES_DB: todoes
+      POSTGRES_USER: bruce
+      POSTGRES_PASSWORD: mypass
+    command: ["postgres", "-c", "log_statement=all"]
 
 volumes:
   maven-repo: ~

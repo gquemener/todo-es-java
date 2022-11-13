@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    working_dir: /app
+    volumes:
+      - '.:/app'
+      - 'maven-repo:/home/www/.m2'
+    user: '${UID:-1000}:${GID:-1000}'
+    ports:
+      - '8080:8080'
+
+volumes:
+  maven-repo: ~

@@ -8,6 +8,9 @@ public class TodoAggregate {
     private final List<TodoEvent> recordedEvents = new ArrayList<>();
     private TodoId id;
 
+    private Integer version = 0;
+    private boolean closed;
+
     private TodoAggregate() {
     }
 
@@ -17,6 +20,10 @@ public class TodoAggregate {
 
 
     public void close() {
+        if (closed) {
+            throw new RuntimeException("Todo is already closed");
+        }
+
         recordThat(new TodoWasClosed(id));
     }
 
@@ -30,13 +37,19 @@ public class TodoAggregate {
     }
 
     private void recordThat(TodoEvent event) {
+        event.setVersion(++version);
         recordedEvents.add(event);
         apply(event);
     }
 
     private void apply(TodoEvent event) {
+        this.version = event.version();
         if (event instanceof TodoWasCreated todoWasCreated) {
-            this.id = todoWasCreated.id();
+            this.id = todoWasCreated.aggregateId();
+            this.closed = false;
+        }
+        if (event instanceof TodoWasClosed todoWasClosed) {
+            this.closed = true;
         }
     }
 

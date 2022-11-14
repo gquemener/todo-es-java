@@ -15,11 +15,16 @@ services:
     environment:
       WAIT_HOSTS: postgres:5432
       WAIT_LOGGER_LEVEL: info
+      DATABASE_URL: jdbc:postgresql://postgres:5432/todoes
+      DATABASE_USER: bruce
+      DATABASE_PASSWORD: mypass
 
   postgres:
     image: postgres:13
     volumes:
       - './docker/pgsql:/docker-entrypoint-initdb.d'
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_DB: todoes
       POSTGRES_USER: bruce

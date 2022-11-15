@@ -100,12 +100,13 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
             if (event instanceof TodoWasCreated todoWasCreated) {
                 todos.put(todoWasCreated.aggregateId(), new TodoReadModel(
                         todoWasCreated.aggregateId().toString(),
-                        todoWasCreated.description()
+                        todoWasCreated.description(),
+                        todoWasCreated.createdAt()
                 ));
             }
 
             if (event instanceof TodoWasClosed todoWasClosed) {
-                todos.get(todoWasClosed.aggregateId()).setClosed(true);
+                todos.get(todoWasClosed.aggregateId()).setClosed(todoWasClosed.createdAt());
             }
         }
 

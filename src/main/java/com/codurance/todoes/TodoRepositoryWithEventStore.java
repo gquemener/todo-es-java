@@ -94,7 +94,7 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
             TodoRepositoryWithEventStore::mapRow
         );
 
-        Map<TodoId, TodoReadModel> todos = new HashMap<>();
+        Map<TodoId, TodoReadModel> todos = new LinkedHashMap<>();
 
         for (TodoEvent event : events) {
             if (event instanceof TodoWasCreated todoWasCreated) {

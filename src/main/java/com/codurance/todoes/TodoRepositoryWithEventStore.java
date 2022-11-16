@@ -1,5 +1,7 @@
 package com.codurance.todoes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 @Component
@@ -48,12 +49,21 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
             metadata.put("_aggregate_id", event.aggregateId().toString());
             metadata.put("_aggregate_type", "todo");
             metadata.put("_aggregate_version", event.version());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String payload;
+            try {
+                payload = objectMapper.writeValueAsString(event.payload());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
             jdbcTemplate.update(
             "INSERT INTO todo_events (event_id, event_name, payload, metadata, created_at) " +
                     "VALUES (?, ?, ?::jsonb, ?::jsonb, ?::timestamp)",
                 event.id(),
                 event.getClass().getSimpleName(),
-                event.payload().toJSONString(),
+                payload,
                 metadata.toJSONString(),
                 event.createdAt().toLocalDateTime()
             );
@@ -100,7 +110,7 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
             if (event instanceof TodoWasCreated todoWasCreated) {
                 todos.put(todoWasCreated.aggregateId(), new TodoReadModel(
                         todoWasCreated.aggregateId().toString(),
-                        todoWasCreated.description(),
+                        todoWasCreated.payload().description(),
                         todoWasCreated.createdAt()
                 ));
             }

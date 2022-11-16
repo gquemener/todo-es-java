@@ -1,15 +1,11 @@
 package com.codurance.todoes;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-public class TodoWasClosed implements TodoEvent {
+public class TodoWasClosed implements TodoEvent<TodoWasClosed.Payload> {
     private UUID id;
     private TodoId aggregateId;
     private ZonedDateTime createdAt;
@@ -54,12 +50,15 @@ public class TodoWasClosed implements TodoEvent {
     }
 
     @Override
-    public JSONObject payload() {
-        return new JSONObject();
+    public ZonedDateTime createdAt() {
+        return createdAt;
     }
 
     @Override
-    public ZonedDateTime createdAt() {
-        return createdAt;
+    public Payload payload() {
+        return new Payload();
+    }
+
+    public record Payload() {
     }
 }

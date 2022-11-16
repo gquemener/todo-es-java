@@ -16,6 +16,7 @@ public final class TodoWasCreated implements TodoEvent<TodoWasCreated.Payload> {
     private UUID id;
     private ZonedDateTime createdAt;
     private Integer version;
+    private Long position;
 
     public TodoWasCreated(TodoId aggregateId, String description) {
         this.payload = new Payload(aggregateId.toString(), description);
@@ -43,6 +44,7 @@ public final class TodoWasCreated implements TodoEvent<TodoWasCreated.Payload> {
         self.id = UUID.fromString((String) map.get("id"));
         self.createdAt = (ZonedDateTime) map.get("created_at");
         self.version = (Integer) map.get("version");
+        self.position = (Long) map.get("position");
 
         return self;
     }
@@ -74,6 +76,11 @@ public final class TodoWasCreated implements TodoEvent<TodoWasCreated.Payload> {
     @Override
     public Payload payload() {
         return payload;
+    }
+
+    @Override
+    public Long position() {
+        return position;
     }
 
     public record Payload(String id, String description) {

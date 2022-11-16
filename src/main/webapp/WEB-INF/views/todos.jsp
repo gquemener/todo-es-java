@@ -11,9 +11,9 @@
     <ul>
         <c:forEach items="${todos}" var="todo">
             <li>
-                <c:if test="${!todo.closed}"><a href="/close/${todo.id}">Close</a> - </c:if>
-                <c:if test="${todo.closed}"><strike></c:if>
-                ${todo.description}<c:if test="${todo.closed}"></strike> (Closed in ${todo.closedIn} second(s))</c:if>
+                <c:if test="${empty todo.duration}"><a href="/close/${todo.id}">Close</a> - </c:if>
+                <c:if test="${!empty todo.duration}"><strike></c:if>
+                ${todo.description}<c:if test="${!empty todo.duration}"></strike> (Closed in ${todo.duration})</c:if>
             </li>
         </c:forEach>
     </ul>

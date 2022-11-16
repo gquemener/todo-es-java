@@ -7,15 +7,12 @@ import java.time.temporal.ChronoUnit;
 public class TodoReadModel {
     private final String id;
     private final String description;
-    private final ZonedDateTime createdAt;
-    private boolean closed;
-    private long closedIn;
+    private final String duration;
 
-    public TodoReadModel(String id, String description, ZonedDateTime createdAt) {
+    public TodoReadModel(String id, String description, String duration) {
         this.id = id;
         this.description = description;
-        this.createdAt = createdAt;
-        this.closed = false;
+        this.duration = duration;
     }
 
     public String getId() {
@@ -26,16 +23,7 @@ public class TodoReadModel {
         return description;
     }
 
-    public boolean isClosed() {
-        return closed;
-    }
-
-    public long getClosedIn() {
-        return closedIn;
-    }
-
-    public void setClosed(ZonedDateTime closedAt) {
-        this.closed = true;
-        this.closedIn = ChronoUnit.SECONDS.between(createdAt, closedAt);
+    public String getDuration() {
+        return duration;
     }
 }

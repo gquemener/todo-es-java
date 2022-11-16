@@ -10,6 +10,7 @@ public class TodoWasClosed implements TodoEvent<TodoWasClosed.Payload> {
     private TodoId aggregateId;
     private ZonedDateTime createdAt;
     private Integer version;
+    private Long position;
 
     public TodoWasClosed(TodoId aggregateId) {
         this.aggregateId = aggregateId;
@@ -20,12 +21,13 @@ public class TodoWasClosed implements TodoEvent<TodoWasClosed.Payload> {
     private TodoWasClosed() {
     }
 
-    public static TodoEvent fromMap(Map<String, Object> map) {
+    public static TodoWasClosed fromMap(Map<String, Object> map) {
         TodoWasClosed self = new TodoWasClosed();
         self.aggregateId = TodoId.fromString((String) map.get("aggregate_id"));
         self.id = UUID.fromString((String) map.get("id"));
         self.createdAt = (ZonedDateTime) map.get("created_at");
         self.version = (Integer) map.get("version");
+        self.position = (Long) map.get("position");
 
         return self;
     }
@@ -57,6 +59,11 @@ public class TodoWasClosed implements TodoEvent<TodoWasClosed.Payload> {
     @Override
     public Payload payload() {
         return new Payload();
+    }
+
+    @Override
+    public Long position() {
+        return position;
     }
 
     public record Payload() {

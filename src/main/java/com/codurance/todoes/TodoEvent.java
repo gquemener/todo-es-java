@@ -14,4 +14,6 @@ public interface TodoEvent<T> {
     ZonedDateTime createdAt();
 
     T payload();
+
+    Long position();
 }

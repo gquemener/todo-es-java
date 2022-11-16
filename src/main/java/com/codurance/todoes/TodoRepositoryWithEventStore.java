@@ -13,7 +13,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Component
-public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
+public class TodoRepositoryWithEventStore implements TodoRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -23,6 +23,7 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
         map.put("id", rs.getString("event_id"));
         map.put("aggregate_id", rs.getString("aggregate_id"));
         map.put("payload", rs.getString("payload"));
+        map.put("position", rs.getLong("position"));
 
         ZoneId utc = ZoneId.of("UTC");
         map.put(
@@ -79,7 +80,8 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
                         " payload," +
                         " event_name," +
                         " event_id," +
-                        " created_at " +
+                        " created_at, " +
+                        " \"no\" as position " +
                         "from todo_events te where metadata->>'_aggregate_id' = ? order by \"no\" ;",
                 TodoRepositoryWithEventStore::mapRow,
                 id.toString()
@@ -90,37 +92,21 @@ public class TodoRepositoryWithEventStore implements TodoRepository, TodoList {
         ));
     }
 
-    @Override
-    public List<TodoReadModel> all() {
-        List<TodoEvent> events = jdbcTemplate.query(
+    List<TodoEvent> read(Long position) {
+        return jdbcTemplate.query(
             "select" +
-                    " metadata->>'_aggregate_id' as aggregate_id," +
-                    " metadata->>'_aggregate_version' as aggregate_version," +
-                    " payload," +
-                    " event_name," +
-                    " event_id," +
-                    " created_at " +
-                    "from todo_events te order by \"no\" ;",
-            TodoRepositoryWithEventStore::mapRow
+            " metadata->>'_aggregate_id' as aggregate_id," +
+            " metadata->>'_aggregate_version' as aggregate_version," +
+            " payload," +
+            " event_name," +
+            " event_id," +
+            " created_at, " +
+            " \"no\" as position " +
+            "from todo_events te " +
+            "where \"no\" > ? " +
+            "order by \"no\"",
+            TodoRepositoryWithEventStore::mapRow,
+            position
         );
-
-        Map<TodoId, TodoReadModel> todos = new LinkedHashMap<>();
-
-        for (TodoEvent event : events) {
-            if (event instanceof TodoWasCreated todoWasCreated) {
-                todos.put(todoWasCreated.aggregateId(), new TodoReadModel(
-                        todoWasCreated.aggregateId().toString(),
-                        todoWasCreated.payload().description(),
-                        todoWasCreated.createdAt()
-                ));
-            }
-
-            if (event instanceof TodoWasClosed todoWasClosed) {
-                todos.get(todoWasClosed.aggregateId()).setClosed(todoWasClosed.createdAt());
-            }
-        }
-
-        return todos.values().stream().toList();
-
     }
 }

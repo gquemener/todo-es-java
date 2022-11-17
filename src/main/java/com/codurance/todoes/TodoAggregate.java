@@ -1,66 +1,41 @@
 package com.codurance.todoes;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.commandhandling.model.AggregateIdentifier;
+import org.axonframework.commandhandling.model.AggregateLifecycle;
+import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.spring.stereotype.Aggregate;
 
+@Aggregate
 public class TodoAggregate {
+    @AggregateIdentifier
+    private String id;
 
-    private final List<TodoEvent> recordedEvents = new ArrayList<>();
-    private TodoId id;
-
-    private Integer version = 0;
     private boolean closed;
 
-    private TodoAggregate() {
+    public TodoAggregate() {
     }
 
-    public TodoAggregate(TodoId id, String description) {
-        recordThat(new TodoWasCreated(id, description));
+    @CommandHandler
+    public TodoAggregate(CreateTodo cmd) {
+        AggregateLifecycle.apply(new TodoWasCreated(cmd.id(), cmd.description()));
     }
 
-
-    public void close() {
-        if (closed) {
-            throw new RuntimeException("Todo is already closed");
-        }
-
-        recordThat(new TodoWasClosed(id));
+    @EventSourcingHandler
+    public void on(TodoWasCreated evt) {
+        id = evt.id();
+        closed = false;
     }
 
-    public static TodoAggregate replay(List<TodoEvent> history) {
-        TodoAggregate todo = new TodoAggregate();
-        for (TodoEvent event : history) {
-            todo.apply(event);
-        }
+    @CommandHandler
+    public void close(CloseTodo cmd) {
+        if (closed) throw new IllegalStateException("Already closed");
 
-        return todo;
+        AggregateLifecycle.apply(new TodoWasClosed(id));
     }
 
-    private void recordThat(TodoEvent event) {
-        event.setVersion(++version);
-        recordedEvents.add(event);
-        apply(event);
-    }
-
-    private void apply(TodoEvent event) {
-        this.version = event.version();
-        if (event instanceof TodoWasCreated todoWasCreated) {
-            this.id = todoWasCreated.aggregateId();
-            this.closed = false;
-        }
-        if (event instanceof TodoWasClosed todoWasClosed) {
-            this.closed = true;
-        }
-    }
-
-    public List<TodoEvent> popEvents() {
-        List<TodoEvent> events = this.recordedEvents.stream().toList();
-        this.recordedEvents.clear();
-
-        return events;
-    }
-
-    public TodoId id() {
-        return this.id;
+    @EventSourcingHandler
+    public void on(TodoWasClosed evt) {
+        closed = true;
     }
 }

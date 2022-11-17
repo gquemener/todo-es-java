@@ -16,7 +16,7 @@ public class TodoListFinder implements TodoList {
     @Override
     public List<TodoReadModel> all() {
         return jdbcTemplate.query(
-                "SELECT * FROM todo_list_read_model order by created_at",
+                "SELECT * FROM todo_list_read_model order by closed_at asc, created_at asc",
                 (rs, rowNum) -> new TodoReadModel(
                     rs.getString("id"),
                     rs.getString("description"),

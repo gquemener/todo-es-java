@@ -4,6 +4,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 public class TodoListProjector {
     private final TodoRepositoryWithEventStore eventStore;
     private final JdbcTemplate jdbcTemplate;
+    private Long position = 0L;
 
     public TodoListProjector(
             TodoRepositoryWithEventStore eventStore,
@@ -22,30 +24,29 @@ public class TodoListProjector {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    @Async
-    public void run() throws InterruptedException {
+    public void init() {
         jdbcTemplate.update("truncate todo_list_read_model");
-        Long position = 0L;
-        while (true) {
-            for (TodoEvent event : this.eventStore.read(position)) {
-                if (event instanceof TodoWasCreated todoWasCreated) {
-                    insertTodo(
-                        todoWasCreated.aggregateId().toString(),
-                        todoWasCreated.payload().description(),
-                        todoWasCreated.createdAt()
-                    );
-                }
+    }
 
-                if (event instanceof TodoWasClosed todoWasClosed) {
-                    closeTodo(
-                        todoWasClosed.aggregateId().toString(),
-                        todoWasClosed.createdAt()
-                    );
-                }
-
-                position = event.position();
+    @Scheduled(fixedDelay = 100)
+    public void run() {
+        for (TodoEvent event : this.eventStore.read(position)) {
+            if (event instanceof TodoWasCreated todoWasCreated) {
+                insertTodo(
+                    todoWasCreated.aggregateId().toString(),
+                    todoWasCreated.payload().description(),
+                    todoWasCreated.createdAt()
+                );
             }
-            Thread.sleep(1000);
+
+            if (event instanceof TodoWasClosed todoWasClosed) {
+                closeTodo(
+                    todoWasClosed.aggregateId().toString(),
+                    todoWasClosed.createdAt()
+                );
+            }
+
+            position = event.position();
         }
     }
 

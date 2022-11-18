@@ -21,8 +21,6 @@ services:
 
   postgres:
     image: postgres:13
-    volumes:
-      - './docker/pgsql:/docker-entrypoint-initdb.d'
     ports:
       - '5432:5432'
     environment:

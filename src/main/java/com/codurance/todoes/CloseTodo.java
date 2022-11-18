@@ -1,6 +1,6 @@
 package com.codurance.todoes;
 
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 public record CloseTodo(@TargetAggregateIdentifier String id) {
 }

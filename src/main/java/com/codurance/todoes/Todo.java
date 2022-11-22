@@ -13,16 +13,20 @@ public final class Todo {
         this.closed = closed;
     }
 
-    public String id() {
+    public String getId() {
         return id;
     }
 
-    public String description() {
+    public String getDescription() {
         return description;
     }
 
     public boolean closed() {
         return closed;
+    }
+
+    public String getDuration() {
+        return closed ? "y" : null;
     }
 
     @Override

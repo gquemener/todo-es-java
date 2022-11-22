@@ -20,10 +20,10 @@ public class TodoProjection {
     @EventHandler
     public void on(TodoWasClosed evt) {
         todoList.stream()
-                .filter(todo -> todo.id().equals(evt.id()))
+                .filter(todo -> todo.getId().equals(evt.id()))
                 .findFirst()
                 .ifPresent(todo -> {
-                    Todo updatedTodo = new Todo(todo.id(), todo.description(), true);
+                    Todo updatedTodo = new Todo(todo.getId(), todo.getDescription(), true);
                     todoList.remove(todo);
                     todoList.add(updatedTodo);
                 });

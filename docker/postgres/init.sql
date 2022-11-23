@@ -40,4 +40,12 @@ CREATE TABLE IF NOT EXISTS "tokenentry" (
     "owner" VARCHAR(255) NULL,
     PRIMARY KEY ("processorname", "segment")
 );
+
+CREATE TABLE todo_list_read_model (
+    id char(36),
+    description text,
+    created_at TIMESTAMP(6),
+    closed_at TIMESTAMP(6),
+    duration interval generated always as ( age(closed_at, created_at) ) stored
+);
 -- 2022-11-23 08:14:07.340016+00

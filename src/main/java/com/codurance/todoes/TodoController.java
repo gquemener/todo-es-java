@@ -45,6 +45,16 @@ public class TodoController {
         return new RedirectView("/", true);
     }
 
+    @GetMapping("/{id}")
+    public ModelAndView showLog(@PathVariable String id) throws ExecutionException, InterruptedException {
+        List<TodoLogEntry> entries = queryGateway.query(
+            new FetchTodoLogEntryQuery(id),
+            ResponseTypes.multipleInstancesOf(TodoLogEntry.class)
+        ).get();
+
+        return new ModelAndView("log", "entries", entries);
+    }
+
     private record CreateTodoRequest(String description) {
     }
 }

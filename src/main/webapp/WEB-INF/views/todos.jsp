@@ -13,7 +13,7 @@
             <li>
                 <c:if test="${empty todo.duration}"><a href="/close/${todo.id}">Close</a> - </c:if>
                 <c:if test="${!empty todo.duration}"><strike></c:if>
-                ${todo.description}<c:if test="${!empty todo.duration}"></strike> (Closed in ${todo.duration})</c:if>
+                <a href="/${todo.id}">${todo.description}</a><c:if test="${!empty todo.duration}"></strike> (Closed in ${todo.duration})</c:if>
             </li>
         </c:forEach>
     </ul>

@@ -1,6 +1,5 @@
 package com.codurance.todoes;
 
-import org.axonframework.common.jdbc.ConnectionProvider;
 import org.axonframework.common.jdbc.DataSourceConnectionProvider;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;

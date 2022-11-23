@@ -1,7 +1,5 @@
 package com.codurance.todoes;
 
-import java.util.Objects;
-
 public final class TodoLogEntry {
     private final String date;
     private final String message;

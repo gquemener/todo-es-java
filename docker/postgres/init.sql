@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS "domainevententry" (
     CONSTRAINT "domainevententry_pkey" PRIMARY KEY ("globalindex")
 ) WITH (oids = false);
 
-
 CREATE TABLE IF NOT EXISTS "snapshotevententry" (
     "aggregateidentifier" character varying(255) NOT NULL,
     "sequencenumber" bigint NOT NULL,
@@ -31,26 +30,10 @@ CREATE TABLE IF NOT EXISTS "snapshotevententry" (
     CONSTRAINT "snapshotevententry_pkey" PRIMARY KEY ("aggregateidentifier", "sequencenumber")
 ) WITH (oids = false);
 
-CREATE TABLE IF NOT EXISTS "tokenentry" (
-    "processorname" VARCHAR(255) NOT NULL,
-    "segment" INTEGER NOT NULL,
-    "token" bytea NULL,
-    "tokentype" VARCHAR(255) NULL,
-    "timestamp" VARCHAR(255) NULL,
-    "owner" VARCHAR(255) NULL,
-    PRIMARY KEY ("processorname", "segment")
-);
-
 CREATE TABLE todo_list_read_model (
     id char(36),
     description text,
     created_at TIMESTAMP(6),
     closed_at TIMESTAMP(6),
     duration interval generated always as ( age(closed_at, created_at) ) stored
-);
-
-CREATE TABLE todo_log_read_model (
-    todo_id char(36),
-    message text,
-    occurred_at TIMESTAMP(6)
 );

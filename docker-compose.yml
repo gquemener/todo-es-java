@@ -21,6 +21,8 @@ services:
 
   postgres:
     image: postgres:13
+    volumes:
+      - './docker/postgres:/docker-entrypoint-initdb.d'
     ports:
       - '5432:5432'
     environment:
@@ -28,6 +30,11 @@ services:
       POSTGRES_USER: bruce
       POSTGRES_PASSWORD: mypass
     command: ["postgres", "-c", "log_statement=all"]
+
+  adminer:
+    image: adminer:4.8.1-standalone
+    ports:
+      - '8081:8080'
 
 volumes:
   maven-repo: ~

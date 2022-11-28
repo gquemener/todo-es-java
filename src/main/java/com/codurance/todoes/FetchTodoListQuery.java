@@ -1,4 +1,4 @@
 package com.codurance.todoes;
 
-public class FetchTodoListQuery {
+public record FetchTodoListQuery() {
 }

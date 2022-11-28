@@ -12,8 +12,9 @@ services:
       - '8080:8080'
     depends_on:
       - postgres
+      - axonserver
     environment:
-      WAIT_HOSTS: postgres:5432
+      WAIT_HOSTS: postgres:5432,axonserver:8024,axonserver:8124
       WAIT_LOGGER_LEVEL: info
       DATABASE_URL: jdbc:postgresql://postgres:5432/todoes
       DATABASE_USER: bruce
@@ -35,6 +36,13 @@ services:
     image: adminer:4.8.1-standalone
     ports:
       - '8081:8080'
+
+  axonserver:
+    image: axoniq/axonserver:4.6.7-jdk-17-dev-nonroot
+    ports:
+      - '8024:8024'
+    environment:
+      AXONIQ_AXONSERVER_HOSTNAME: axonserver
 
 volumes:
   maven-repo: ~

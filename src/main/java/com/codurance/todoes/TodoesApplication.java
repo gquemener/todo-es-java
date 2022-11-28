@@ -17,11 +17,10 @@ public class TodoesApplication {
 	@Qualifier("messageSerializer")
 	@Bean
 	public Serializer messageSerializer(ObjectMapper mapper) {
-		mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator());
-
 		return JacksonSerializer.builder()
 				.objectMapper(mapper)
 				.lenientDeserialization()
+				.defaultTyping()
 				.build();
 	}
 }

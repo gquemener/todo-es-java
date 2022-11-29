@@ -19,12 +19,12 @@ public class TodoController {
 
     @GetMapping("/")
     public ModelAndView todos() throws ExecutionException, InterruptedException {
-        List<Todo> todos = queryGateway.query(
+        TodoList todoList = queryGateway.query(
                 new FetchTodoListQuery(),
-                ResponseTypes.multipleInstancesOf(Todo.class)
+                ResponseTypes.instanceOf(TodoList.class)
         ).get();
 
-        return new ModelAndView("todos", "todos", todos);
+        return new ModelAndView("todos", "todos", todoList.entries());
     }
 
     @PostMapping("/todos")

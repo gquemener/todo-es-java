@@ -13,14 +13,4 @@ public class TodoesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TodoesApplication.class, args);
 	}
-
-	@Qualifier("messageSerializer")
-	@Bean
-	public Serializer messageSerializer(ObjectMapper mapper) {
-		return JacksonSerializer.builder()
-				.objectMapper(mapper)
-				.lenientDeserialization()
-				.defaultTyping()
-				.build();
-	}
 }

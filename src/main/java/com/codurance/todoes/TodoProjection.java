@@ -42,14 +42,14 @@ public class TodoProjection {
     }
 
     @QueryHandler
-    public List<Todo> fetch(FetchTodoListQuery query) {
-        return jdbcTemplate.query(
+    public TodoList fetch(FetchTodoListQuery query) {
+        return new TodoList(jdbcTemplate.query(
             "SELECT * FROM todo_list_read_model order by closed_at asc, created_at asc",
             (rs, rowNum) -> new Todo(
                 rs.getString("id"),
                 rs.getString("description"),
                 rs.getString("duration")
             )
-        );
+        ));
     }
 }

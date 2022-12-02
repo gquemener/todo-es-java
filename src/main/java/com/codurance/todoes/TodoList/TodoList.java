@@ -1,4 +1,4 @@
-package com.codurance.todoes;
+package com.codurance.todoes.TodoList;
 
 import java.util.List;
 

@@ -1,12 +1,13 @@
-package com.codurance.todoes;
+package com.codurance.todoes.Auditing;
 
+import com.codurance.todoes.Todo.TodoWasClosed;
+import com.codurance.todoes.Todo.TodoWasCreated;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.List;
 
 @Component
 public class TodoLogEntryProjection {
@@ -30,7 +31,7 @@ public class TodoLogEntryProjection {
     }
 
     @QueryHandler
-    public List<TodoLogEntry> fetch(FetchTodoLogEntryQuery query) {
-        return repository.findAllByTodoId(query.id());
+    public TodoLog fetch(FetchTodoLogEntryQuery query) {
+        return new TodoLog(repository.findAllByTodoId(query.id()));
     }
 }

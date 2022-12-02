@@ -1,4 +1,4 @@
-package com.codurance.todoes;
+package com.codurance.todoes.Todo;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 

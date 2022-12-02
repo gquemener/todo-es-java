@@ -1,5 +1,11 @@
 package com.codurance.todoes;
 
+import com.codurance.todoes.Auditing.FetchTodoLogEntryQuery;
+import com.codurance.todoes.Auditing.TodoLog;
+import com.codurance.todoes.Todo.CloseTodo;
+import com.codurance.todoes.Todo.CreateTodo;
+import com.codurance.todoes.TodoList.FetchTodoListQuery;
+import com.codurance.todoes.TodoList.TodoList;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
@@ -8,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -47,12 +52,12 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public ModelAndView showLog(@PathVariable String id) throws ExecutionException, InterruptedException {
-        List<TodoLogEntry> entries = queryGateway.query(
+        TodoLog log = queryGateway.query(
             new FetchTodoLogEntryQuery(id),
-            ResponseTypes.multipleInstancesOf(TodoLogEntry.class)
+            ResponseTypes.instanceOf(TodoLog.class)
         ).get();
 
-        return new ModelAndView("log", "entries", entries);
+        return new ModelAndView("log", "entries", log.entries());
     }
 
     private record CreateTodoRequest(String description) {

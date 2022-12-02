@@ -1,4 +1,4 @@
-package com.codurance.todoes;
+package com.codurance.todoes.TodoList;
 
 public final class Todo {
     private final String id;

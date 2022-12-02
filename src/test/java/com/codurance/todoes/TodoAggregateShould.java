@@ -1,5 +1,6 @@
 package com.codurance.todoes;
 
+import com.codurance.todoes.Todo.*;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

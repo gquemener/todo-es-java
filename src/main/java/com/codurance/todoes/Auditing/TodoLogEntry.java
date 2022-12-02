@@ -1,4 +1,4 @@
-package com.codurance.todoes;
+package com.codurance.todoes.Auditing;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

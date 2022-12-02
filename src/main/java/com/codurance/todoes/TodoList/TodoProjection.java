@@ -1,5 +1,7 @@
-package com.codurance.todoes;
+package com.codurance.todoes.TodoList;
 
+import com.codurance.todoes.Todo.TodoWasClosed;
+import com.codurance.todoes.Todo.TodoWasCreated;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
 import org.axonframework.queryhandling.QueryHandler;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 @Component
 public class TodoProjection {

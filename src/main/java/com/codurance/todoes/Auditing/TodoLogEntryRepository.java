@@ -1,4 +1,4 @@
-package com.codurance.todoes;
+package com.codurance.todoes.Auditing;
 
 import org.springframework.data.repository.CrudRepository;
 

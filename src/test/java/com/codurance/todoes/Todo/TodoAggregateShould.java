@@ -1,16 +1,15 @@
-package com.codurance.todoes;
+package com.codurance.todoes.Todo;
 
-import com.codurance.todoes.Todo.*;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TodoAggregateTest {
-    private AggregateTestFixture<TodoAggregate> fixture;
+class TodoTest {
+    private AggregateTestFixture<Todo> fixture;
 
     @BeforeEach
     void setUp() {
-        fixture = new AggregateTestFixture<>(TodoAggregate.class);
+        fixture = new AggregateTestFixture<>(Todo.class);
     }
 
     @Test

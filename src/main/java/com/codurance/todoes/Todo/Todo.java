@@ -8,7 +8,7 @@ import org.axonframework.modelling.command.AggregateVersion;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
-public class TodoAggregate {
+public class Todo {
     @AggregateIdentifier
     private String id;
 
@@ -17,11 +17,11 @@ public class TodoAggregate {
 
     private boolean closed;
 
-    public TodoAggregate() {
+    public Todo() {
     }
 
     @CommandHandler
-    public TodoAggregate(CreateTodo cmd) {
+    public Todo(CreateTodo cmd) {
         AggregateLifecycle.apply(new TodoWasCreated(cmd.id(), cmd.description()));
     }
 

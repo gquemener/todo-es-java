@@ -1,4 +1,4 @@
 package com.codurance.todoes.Todo;
 
-public record CreateTodo (String id, String description) {
+public record CreateTodo(String id, String description) {
 }

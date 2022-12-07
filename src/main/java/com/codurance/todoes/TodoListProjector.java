@@ -28,7 +28,7 @@ public class TodoListProjector {
         jdbcTemplate.update("truncate todo_list_read_model");
     }
 
-    @Scheduled(fixedDelay = 100)
+    @Scheduled(fixedDelay = 1)
     public void run() {
         for (TodoEvent event : this.eventStore.read(position)) {
             if (event instanceof TodoWasCreated todoWasCreated) {
